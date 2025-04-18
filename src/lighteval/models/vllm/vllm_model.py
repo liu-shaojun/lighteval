@@ -51,7 +51,8 @@ logger = logging.getLogger(__name__)
 if is_vllm_available():
     import ray
     from more_itertools import distribute
-    from vllm import LLM, SamplingParams
+    from ipex_llm.vllm.xpu.engine import IPEXLLMClass as LLM
+    from vllm import SamplingParams
     from vllm.distributed.parallel_state import destroy_distributed_environment, destroy_model_parallel
     from vllm.transformers_utils.tokenizer import get_tokenizer
 
