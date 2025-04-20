@@ -94,6 +94,9 @@ class VLLMModelConfig(ModelConfig):
     max_num_seqs: PositiveInt = 128  # maximum number of sequences per iteration; This variable and `max_num_batched_tokens` effectively control the batch size at prefill stage. See https://github.com/vllm-project/vllm/issues/2492 for detailed explaination.
     max_num_batched_tokens: PositiveInt = 2048  # maximum number of tokens per batch
     subfolder: str | None = None
+    distributed_executor_backend: str = "ray"
+    load_in_low_bit: str = "sym_int4"
+
 
 
 class VLLMModel(LightevalModel):
@@ -176,6 +179,11 @@ class VLLMModel(LightevalModel):
             "seed": int(config.seed),
             "max_num_seqs": int(config.max_num_seqs),
             "max_num_batched_tokens": int(config.max_num_batched_tokens),
+            "distributed_executor_backend": config.distributed_executor_backend,
+            "load_in_low_bit": config.load_in_low_bit,
+            "disable_async_output_proc": True,
+            "enforce_eager": True,
+            "block_size": 8,
         }
         if config.data_parallel_size > 1:
             self.model_args["distributed_executor_backend"] = "ray"
